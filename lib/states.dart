@@ -3,13 +3,14 @@ import 'package:viewmodel/viewmodel.dart';
 class MutableState<T> {
   T _state;
   final ViewModel _viewModel;
+
   MutableState(this._state, this._viewModel);
 
   T get state => _state;
 
   set state(T v) {
     _state = v;
-    _viewModel.update();
+    _viewModel.update(this);
   }
 
   T call([T? state]) {
@@ -33,7 +34,7 @@ class MutableStateList<T> implements Iterable<T> {
 
   void operator []=(int index, T value) {
     _list[index] = value;
-    _viewModel.update();
+    _viewModel.update(this);
   }
 
   int indexOf(T value) {
@@ -42,44 +43,50 @@ class MutableStateList<T> implements Iterable<T> {
 
   void insert(int index, T value) {
     _list.insert(index, value);
-    _viewModel.update();
+    _viewModel.update(this);
   }
 
   void insertAll(int index, Iterable<T> value) {
     _list.insertAll(index, value);
-    _viewModel.update();
+    _viewModel.update(this);
   }
 
   void add(T value) {
     _list.add(value);
-    _viewModel.update();
+    _viewModel.update(this);
   }
 
   void addAll(Iterable<T> iterable) {
     _list.addAll(iterable);
-    _viewModel.update();
+    _viewModel.update(this);
+  }
+
+  void replaceAll(Iterable<T> iterable) {
+    _list.clear();
+    _list.addAll(iterable);
+    _viewModel.update(this);
   }
 
   Iterable<T> get reversed => _list.reversed;
 
   void clear() {
     _list.clear();
-    _viewModel.update();
+    _viewModel.update(this);
   }
 
   void remove(T value) {
     _list.remove(value);
-    _viewModel.update();
+    _viewModel.update(this);
   }
 
   void removeAt(int index) {
     _list.removeAt(index);
-    _viewModel.update();
+    _viewModel.update(this);
   }
 
   void removeWhere(bool Function(T) test) {
     _list.removeWhere(test);
-    _viewModel.update();
+    _viewModel.update(this);
   }
 
   @override
@@ -214,7 +221,7 @@ class MutableStateList<T> implements Iterable<T> {
   }
 
   @override
-  Iterable<T> whereType<T>() {
+  Iterable<R> whereType<R>() {
     return _list.whereType();
   }
 }
@@ -228,7 +235,9 @@ class FutureState<T> {
   bool _loading = true;
 
   T? get state => _state;
+
   Object? get error => _error;
+
   bool get loading => _loading;
 
   FutureState(
@@ -242,11 +251,11 @@ class FutureState<T> {
     this._future.then((value) {
       _state = value;
       _loading = false;
-      this._viewModel.update();
+      this._viewModel.update(this);
     }).catchError((error) {
       _state = null;
       _error = error;
-      this._viewModel.update();
+      this._viewModel.update(this);
     });
   }
 }

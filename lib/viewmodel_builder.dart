@@ -4,6 +4,7 @@ import 'package:viewmodel/viewmodel.dart';
 class ViewModelBuilder<T extends ViewModel> extends StatefulWidget {
   final T Function() viewModelBuilder;
   final Widget Function(BuildContext context, T viewModel) builder;
+
   const ViewModelBuilder({
     super.key,
     required this.viewModelBuilder,
@@ -17,7 +18,8 @@ class ViewModelBuilder<T extends ViewModel> extends StatefulWidget {
 }
 
 class _ViewModelBuilderState<T extends ViewModel>
-    extends State<ViewModelBuilder<T>> with WidgetsBindingObserver {
+    extends State<ViewModelBuilder<T>>
+    with WidgetsBindingObserver {
   late T viewModel;
 
   @override
@@ -25,13 +27,16 @@ class _ViewModelBuilderState<T extends ViewModel>
     super.initState();
     viewModel = widget.viewModelBuilder();
 
-    viewModel.initialize();
+    viewModel.init();
     viewModel.addListener(() {
       if (mounted) {
         setState(() {});
       }
     });
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
+      viewModel.update(null);
+    });
   }
 
   @override
