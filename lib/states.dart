@@ -1,4 +1,4 @@
-import 'package:viewmodel/viewmodel.dart';
+import 'package:viewmodel_flutter/flutter_viewmodel.dart';
 
 class MutableState<T> {
   T _state;

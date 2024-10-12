@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:viewmodel/viewmodel.dart';
+import 'package:viewmodel_flutter/flutter_viewmodel.dart';
 
 class ViewModelBuilder<T extends ViewModel> extends StatefulWidget {
   final T Function() viewModelBuilder;

@@ -1,8 +1,8 @@
-library viewmodel;
+library viewmodel_flutter;
 
 import 'package:flutter/widgets.dart';
-import 'package:viewmodel/side_effects.dart';
-import 'package:viewmodel/states.dart';
+import 'package:viewmodel_flutter/side_effects.dart';
+import 'package:viewmodel_flutter/states.dart';
 
 abstract class ViewModel extends ChangeNotifier {
   final List<SideEffect> _sideEffects = [];
