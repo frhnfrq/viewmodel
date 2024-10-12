@@ -1,7 +1,7 @@
 name: viewmodel
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+homepage: https://github.com/frhnfrq/viewmodel
 
 environment:
   sdk: ^3.5.3

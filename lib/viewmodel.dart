@@ -1,7 +1,5 @@
 library viewmodel;
 
-import 'dart:developer';
-
 import 'package:flutter/widgets.dart';
 import 'package:viewmodel/side_effects.dart';
 import 'package:viewmodel/states.dart';
