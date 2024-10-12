@@ -8,7 +8,6 @@
 - **State Management:** Simple APIs for mutable states and lists, enabling easy state management.
 - **Side Effects Management:** Automatically handle side effects through dependencies when state changes.
 - **No Boilerplate:** Minimal setup with easy-to-use builder functions for reactive UI updates.
-- **Lifecycle Awareness:** Similar to Android’s ViewModel, it supports lifecycle events with `onAppLifecycleStateChanged`.
 
 ## Installation
 
