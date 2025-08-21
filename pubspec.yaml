@@ -1,6 +1,6 @@
 name: viewmodel_flutter
 description: "ViewModel for Flutter. State management made easy."
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/frhnfrq/viewmodel
 
 environment:
