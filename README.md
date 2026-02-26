@@ -15,7 +15,7 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  viewmodel: latest_version
+  viewmodel_flutter: latest_version
 ```
 
 Then run:
