@@ -29,6 +29,10 @@ abstract class ViewModel extends ChangeNotifier {
   MutableStateList<T> mutableStateListOf<T>() {
     return MutableStateList(this);
   }
+  
+  MutableStateMap<K, V> mutableStateMapOf<K, V>() {
+    return MutableStateMap(this);
+  }
 
   void onAppLifecycleStateChanged(AppLifecycleState state) {}
 
