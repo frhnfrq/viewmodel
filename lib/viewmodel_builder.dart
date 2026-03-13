@@ -18,9 +18,9 @@ class ViewModelBuilder<T extends ViewModel> extends StatefulWidget {
 }
 
 class _ViewModelBuilderState<T extends ViewModel>
-    extends State<ViewModelBuilder<T>>
-    with WidgetsBindingObserver {
+    extends State<ViewModelBuilder<T>> with WidgetsBindingObserver {
   late T viewModel;
+  late VoidCallback _listener;
 
   @override
   void initState() {
@@ -28,11 +28,12 @@ class _ViewModelBuilderState<T extends ViewModel>
     viewModel = widget.viewModelBuilder();
 
     viewModel.init();
-    viewModel.addListener(() {
+    _listener = () {
       if (mounted) {
         setState(() {});
       }
-    });
+    };
+    viewModel.addListener(_listener);
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((duration) {
       viewModel.update(null);
@@ -48,6 +49,7 @@ class _ViewModelBuilderState<T extends ViewModel>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    viewModel.removeListener(_listener);
     viewModel.dispose();
     super.dispose();
   }

@@ -226,41 +226,6 @@ class MutableStateList<T> implements Iterable<T> {
   }
 }
 
-class FutureState<T> {
-  final Future<T> _future;
-  final ViewModel _viewModel;
-
-  T? _state;
-  Object? _error;
-  bool _loading = true;
-
-  T? get state => _state;
-
-  Object? get error => _error;
-
-  bool get loading => _loading;
-
-  FutureState(
-    this._future,
-    this._viewModel,
-  ) {
-    resolve();
-  }
-
-  void resolve() {
-    this._future.then((value) {
-      _state = value;
-      _loading = false;
-      this._viewModel.update(this);
-    }).catchError((error) {
-      _state = null;
-      _error = error;
-      this._viewModel.update(this);
-    });
-  }
-}
-
-
 /// A reactive Map that notifies a [ViewModel] when its contents are modified.
 ///
 /// Use this class within a ViewModel to hold map state. Any mutation operations
