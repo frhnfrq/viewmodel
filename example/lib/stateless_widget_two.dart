@@ -25,7 +25,7 @@ class StatelessWidgetTwo extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  viewModel.counter(viewModel.counter() + 1);
+                  viewModel.counter(viewModel.counter.state + 1);
                 },
                 child: Text('Update Stateless Widget Two'),
               ),

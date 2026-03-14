@@ -24,14 +24,13 @@ Then run:
 flutter pub get
 ```
 
-
 ## Example
 
 Here’s a simple example of how to use this package to wire up a simple counter:
 
 ```dart
 class CounterViewModel extends ViewModel {
-  
+
   // late is used so that we can initialize the mutable states with the helper functions in init()
   late MutableState<int> counter;
   late MutableState<String> username;
@@ -45,7 +44,7 @@ class CounterViewModel extends ViewModel {
   void increment() {
     counter.state++;
   }
-  
+
   void updateUsername(String newUsername) {
     // username.state = newUsername;
     username(newUsername); // It's an alternative, a syntactic sugar for the above line to update the state.
@@ -63,10 +62,10 @@ class CounterScreen extends StatelessWidget {
           body: Center(
             child: Column(
               children: [
-                Text("User: ${viewModel.username()}"), // You can call the state itself to get the value, instead of viewModel.counter.state
-                Text("Counter: ${viewModel.counter()}"),
+                Text("User: ${viewModel.username.state}"),
+                Text("Counter: ${viewModel.counter.state}"),
               ]
-            ), 
+            ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
@@ -83,31 +82,54 @@ class CounterScreen extends StatelessWidget {
 ```
 
 ## Overview
-`ViewModel` is the core class that holds your app's business logic and state. Create your own ViewModel by extending it. 
-Override the `init()` method which is called when your ViewModel is attached to the UI. Initialize your states and add side effects in this method. 
+
+`ViewModel` is the core class that holds your app's business logic and state. Create your own ViewModel by extending it.
+Override the `init()` method which is called when your ViewModel is attached to the UI. Initialize your states and add side effects in this method.
 
 ### MutableState
+
 Wrap your state T with MutableState<T> so that it can be observed and update the UI when it's mutated. For simplicity, use `mutableStateOf<T>(T state)` helper function to create mutable states.
 
 Though, you'll be able to get and set the value of the state with the `MutableState<T>.state` field, syntactic sugars are available to simplify this. Please refer to the example above.
+Use `state()` call only to set a value. Use `.state` to read values.
 
 ### MutableStateList
+
 Creates a mutable list state, allowing you to handle list operations like adding, removing, or updating elements, with reactive UI updates. For simplicity, use `mutableStateListOf<T>()` helper function to create mutable state lists.
 It's a wrapper of List, so you can interact with `MutableStateList` just like a List. Updating any item will trigger the UI to update;
 
 ### LifeCycle
+
 You can override `onAppLifecycleStateChanged(AppLifecycleState state)` in your `ViewModel` to receive lifecycle updates when the app's lifecycle state changes.
 
 ### ViewModelBuilder
+
 The `ViewModelBuilder` widget simplifies building the UI by providing your `ViewModel` instance to the widget tree. The UI will rebuild whenever any of the state changes.
+If your ViewModel depends on changing parent inputs (for example a `userId`), pass a `viewModelKey` so the ViewModel is recreated when identity changes.
+
+```dart
+ViewModelBuilder<UserViewModel>(
+  viewModelKey: userId,
+  viewModelBuilder: () => UserViewModel(userId: userId),
+  builder: (context, viewModel) {
+    return Text(viewModel.userId.state);
+  },
+)
+```
 
 ### ViewModelProvider
+
 Though, you can get access to your `ViewModel` from the widget builder of `ViewModelBuilder`, you can also get access to your `ViewModel` through the `ViewModelProvider`. In your `build(context)` method, use `YourViewModel viewModel = ViewModelProvider.of<YourViewModel>(context);` or you can use the helper extension function on `BuildContext`, `YourViewModel viewModel = context.viewModel<YourViewModel>();`
 This becomes handy when you need to access the viewModel further down the widget tree, specially a widget defined in another file.
 
+If you are not sure a provider exists in scope, use nullable lookup: `context.maybeViewModel<YourViewModel>()`.
+Use `context.viewModel<YourViewModel>()` when the provider must exist; it throws a clear error otherwise.
+
 ### Side Effect
+
 You can create side effects that trigger when certain state variables change. This is useful for cases where state changes should trigger API calls, analytics events, or other non-UI logic. It's preferable to create side effects in the `init` method.
 Example:
+
 ```dart
 @override
 void init() {
@@ -125,4 +147,5 @@ All side effects are called exactly once when the UI builds for the first time. 
 In this example, the side effect is triggered whenever `username` is updated.
 
 ## Note
+
 This package is at the very initial stage. Feel free to explore the code and contribute to the development of the package. We hope it simplifies your state management process and improves the structure of your Flutter apps!
