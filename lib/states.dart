@@ -13,12 +13,8 @@ class MutableState<T> {
     _viewModel.update(this);
   }
 
-  T call([T? state]) {
-    if (state != null) {
-      this.state = state;
-    }
-
-    return this.state;
+  void call(T state) {
+    this.state = state;
   }
 }
 
